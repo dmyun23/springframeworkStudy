@@ -1,6 +1,8 @@
 package com.developers.dmaker.service;
 
 import com.developers.dmaker.dto.CreateDeveloper;
+import com.developers.dmaker.dto.DeveloperDtailDto;
+import com.developers.dmaker.dto.DeveloperDto;
 import com.developers.dmaker.entity.Developer;
 import com.developers.dmaker.exception.DMakerErrorCode;
 import com.developers.dmaker.exception.DMakerException;
@@ -13,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.developers.dmaker.exception.DMakerErrorCode.*;
 
@@ -65,5 +69,18 @@ public class DMakerService {
                 .ifPresent((developer->{
                     throw new DMakerException(DUPLICATED_MEMBER_ID);
                 }));
+    }
+
+    public List<DeveloperDto> getAllDevelopers() {
+
+        return develpoerRepository.findAll()
+                .stream().map(DeveloperDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public DeveloperDtailDto getDeveloperDetail(String memberId) {
+        return develpoerRepository.findByMemberId(memberId)
+                .map(DeveloperDtailDto::fromEntity)
+                .orElseThrow(()->new DMakerException(NO_DEVELOPER));
     }
 }
