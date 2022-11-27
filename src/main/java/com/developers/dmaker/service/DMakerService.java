@@ -4,6 +4,7 @@ import com.developers.dmaker.code.StatusCode;
 import com.developers.dmaker.dto.*;
 import com.developers.dmaker.entity.Developer;
 import com.developers.dmaker.entity.RetiredDeveloper;
+import com.developers.dmaker.entity.constant.DMakerConstant;
 import com.developers.dmaker.exception.DMakerException;
 import com.developers.dmaker.repository.DevelpoerRepository;
 import com.developers.dmaker.repository.RetiredDevelpoerRepository;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.developers.dmaker.entity.constant.DMakerConstant.*;
 import static com.developers.dmaker.exception.DMakerErrorCode.*;
 @Service
 @RequiredArgsConstructor
@@ -96,21 +99,26 @@ public class DMakerService {
         }));
     }
     private static void validateDeveloperLevel(
-            DeveloperLevel developerLevel, Integer experienceYears
+            @NonNull  DeveloperLevel developerLevel, Integer experienceYears
     ) {
-        if(developerLevel == DeveloperLevel.SENIOR
-                && experienceYears < 10 ) {
-//            throw new RuntimeException("SENIOR need 10 years experience.");
-            throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
-        }
-        if(developerLevel == DeveloperLevel.JUNGNIOR
-                && (experienceYears < 4 || experienceYears >10 )){
-            throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
-        }
-
-        if(developerLevel == DeveloperLevel.JUNIOR && experienceYears >4) {
-            throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
-        }
+        developerLevel.validateExperience(experienceYears);
+//        if( experienceYears < developerLevel.getMinExperienceYears() ||
+//                experienceYears > developerLevel.getMaxExperienceYears()){
+//            throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
+//        }
+//        if(developerLevel == DeveloperLevel.SENIOR
+//                && experienceYears < MIN_SENIOR_EXPERIENCE_YEARS ) {
+////            throw new RuntimeException("SENIOR need 10 years experience.");
+//            throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
+//        }
+//        if(developerLevel == DeveloperLevel.JUNGNIOR
+//                && (experienceYears < 4 || experienceYears >MIN_SENIOR_EXPERIENCE_YEARS )){
+//            throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
+//        }
+//
+//        if(developerLevel == DeveloperLevel.JUNIOR && experienceYears > MAX_JUNIOR_EXPERIENCE_YEARS) {
+//            throw new DMakerException(LEVEL_EXPERIENCE_YEARS_NOT_MATCHED);
+//        }
     }
     private Developer createDeveloperFromRequest(CreateDeveloper.Request request){
         return Developer.builder()
