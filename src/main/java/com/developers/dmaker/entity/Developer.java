@@ -1,6 +1,7 @@
 package com.developers.dmaker.entity;
 
 import com.developers.dmaker.code.StatusCode;
+import com.developers.dmaker.dto.CreateDeveloper;
 import com.developers.dmaker.type.DeveloperLevel;
 import com.developers.dmaker.type.DeveloperSkillType;
 import lombok.*;
@@ -28,19 +29,14 @@ public class Developer {
 
     @Enumerated(EnumType.STRING)
     private DeveloperSkillType developerSkillType;
-
     private Integer experienceYears;
     private String memberId;
     private String name;
     private Integer age;
-
-
     @Enumerated(EnumType.STRING)
     private StatusCode statusCode;
-
     @CreatedDate
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime updatedAt;
 }
